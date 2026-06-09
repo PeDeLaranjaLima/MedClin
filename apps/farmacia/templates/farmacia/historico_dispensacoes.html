@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Histórico de Dispensações</title>
+</head>
+<body>
+
+    <h1>Histórico de Dispensações</h1>
+
+    <table border="1">
+
+        <tr>
+            <th>Medicamento</th>
+            <th>Quantidade</th>
+            <th>Farmacêutico</th>
+            <th>Prontuário</th>
+            <th>Data</th>
+        </tr>
+
+        {% for dispensacao in dispensacoes %}
+
+        <tr>
+
+            <td>
+                {{ dispensacao.medicamento.nome }}
+            </td>
+
+            <td>
+                {{ dispensacao.quantidade }}
+            </td>
+
+            <td>
+                {{ dispensacao.farmaceutico.nome }}
+            </td>
+
+            <td>
+                {{ dispensacao.prontuario_id }}
+            </td>
+
+            <td>
+                {{ dispensacao.data_dispensacao }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <a href="{% url 'estoque' %}">
+        Voltar
+    </a>
+
+</body>
+</html>
