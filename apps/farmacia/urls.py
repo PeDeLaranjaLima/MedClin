@@ -1,9 +1,9 @@
 from django.urls import path
+
 from .views import *
 
 
 urlpatterns = [
-
     path(
         "",
         estoque,
@@ -23,14 +23,14 @@ urlpatterns = [
     ),
 
     path(
-    "editar/<int:medicamento_id>/",
-    editar_medicamento_view,
-    name="editar_medicamento"
+        "editar/<int:medicamento_id>/",
+        editar_medicamento_view,
+        name="editar_medicamento"
     ),
 
     path(
-    "historico/",
-    historico_dispensacoes_view,
-    name="historico_dispensacoes"
+        "historico/",
+        historico_dispensacoes_view,
+        name="historico_dispensacoes"
     ),
 ]

@@ -15,13 +15,9 @@ class Farmaceutico(models.Model):
 
 class Medicamento(models.Model):
     nome = models.CharField(max_length=100)
-
     numero_lote = models.CharField(max_length=50)
-
     quantidade_estoque = models.IntegerField()
-
     quantidade_minima = models.IntegerField()
-
     data_validade = models.DateField()
 
     def __str__(self):
@@ -29,7 +25,6 @@ class Medicamento(models.Model):
 
 
 class MedicamentoDispensado(models.Model):
-
     medicamento = models.ForeignKey(
         Medicamento,
         on_delete=models.CASCADE
@@ -41,29 +36,35 @@ class MedicamentoDispensado(models.Model):
     )
 
     prontuario_id = models.IntegerField()
-
     quantidade = models.IntegerField()
 
     data_dispensacao = models.DateTimeField(
         auto_now_add=True
     )
 
+    def __str__(self):
+        return f"{self.medicamento.nome} - {self.quantidade}"
+
 
 class EstoqueMedicamento(models.Model):
-
     gestor_id = models.IntegerField()
 
     medicamento = models.ForeignKey(
         Medicamento,
         on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return self.medicamento.nome
 
 
 class GestorMedicamento(models.Model):
-
     gestor_id = models.IntegerField()
 
     medicamento = models.ForeignKey(
         Medicamento,
         on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return self.medicamento.nome

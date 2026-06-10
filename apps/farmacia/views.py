@@ -1,11 +1,11 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
+
 from .forms import *
+from .models import Medicamento, MedicamentoDispensado
 from .services import *
 
 
 def estoque(request):
-
     medicamentos = listar_medicamentos()
 
     return render(
@@ -18,65 +18,94 @@ def estoque(request):
 
 
 def cadastrar_medicamento_view(request):
+    form = MedicamentoForm()
 
+    if request.method == "POST":
+        form = MedicamentoForm(request.POST)
 
-form = MedicamentoForm()
+        if form.is_valid():
+            cadastrar_medicamento(
+                form.cleaned_data
+            )
 
+            return redirect("estoque")
 
-if request.method == "POST":
-
-    form = MedicamentoForm(
-        request.POST
+    return render(
+        request,
+        "farmacia/cadastrar_medicamento.html",
+        {
+            "form": form
+        }
     )
 
-    if form.is_valid():
 
-        cadastrar_medicamento(
-            form.cleaned_data
-        )
+def dispensar_view(request, medicamento_id):
+    medicamento = Medicamento.objects.get(
+        id=medicamento_id
+    )
 
-        return redirect(
-            "estoque"
-        )
+    form = DispensacaoForm()
 
+    if request.method == "POST":
+        form = DispensacaoForm(request.POST)
 
-return render(
-    request,
-    "farmacia/cadastrar_medicamento.html",
-    {
-        "form": form
-    }
-)
+        if form.is_valid():
+            dispensar_medicamento(
+                medicamento.id,
+                1,
+                form.cleaned_data["prontuario_id"],
+                form.cleaned_data["quantidade"]
+            )
 
+            return redirect("estoque")
 
-def dispensar_view(
-    request,
-    medicamento_id
-):
-
-
-medicamento = Medicamento.objects.get(
-    id=medicamento_id
-)
-
-
-if request.method == "POST":
-
-
-dispensar_medicamento(
-    medicamento.id,
-    1,
-    form.cleaned_data["prontuario_id"],
-    form.cleaned_data["quantidade"]
-)
-
-
-return redirect(
-    "estoque"
-)
+    return render(
+        request,
+        "farmacia/dispensar_medicamento.html",
+        {
+            "form": form,
+            "medicamento": medicamento
+        }
+    )
 
 
 def editar_medicamento_view(request, medicamento_id):
+    medicamento = Medicamento.objects.get(
+        id=medicamento_id
+    )
+
+    if request.method == "POST":
+        form = MedicamentoForm(
+            request.POST,
+            instance=medicamento
+        )
+
+        if form.is_valid():
+            form.save()
+
+            return redirect("estoque")
+
+    else:
+        form = MedicamentoForm(
+            instance=medicamento
+        )
+
+    return render(
+        request,
+        "farmacia/editar_medicamento.html",
+        {
+            "form": form
+        }
+    )
 
 
 def historico_dispensacoes_view(request):
+    dispensacoes = MedicamentoDispensado.objects.all()
+
+    return render(
+        request,
+        "farmacia/historico_dispensacoes.html",
+        {
+            "dispensacoes": dispensacoes
+        }
+    )
