@@ -45,11 +45,30 @@ meu_projeto/
 └── db.sql                   # Banco
 ```
 
-Dentro da pasta de atendimento, por exemplo, podemos ter algo assim:
+Dentro da pasta de prontuário:
 ```
-atendimento/
-├── models.py                # estrutura dos dados
-├── views.py
-├── urls.py                  # apenas para manipular, sem regras complexas
-├── admin.py
+apps/
+└── prontuario/
+    ├── __init__.py
+    ├── admin.py
+    ├── apps.py
+    ├── models.py              # Camada de dados
+    ├── views.py               # Camada de apresentação
+    ├── urls.py
+    │
+    ├── services/              # Regras de negócio: O que está no diagrama de classes
+    │   ├── __init__.py
+    │   └── prontuario_service.py
+    │
+    ├── dtos/                  # entrada/saída de dados
+    │   └── prontuario_dto.py
+    │
+    ├── selectors/             # consultas complexas
+    │   └── prontuario_selector.py
+    │
+    ├── templates/
+    │   └── prontuario/
+    │
+    └── tests/
 ```
+Desse modo, o fluxo ideal seria: View → Service → Model → Banco.
